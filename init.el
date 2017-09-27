@@ -2,6 +2,7 @@
   (local-set-key (kbd "RET") 'newline-and-indent)))
 
 (tool-bar-mode -1)
+(setq cider-repl-use-pretty-printing t)
 
 ;;;;
 ;; Packages
