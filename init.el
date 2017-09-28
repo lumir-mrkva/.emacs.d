@@ -10,12 +10,14 @@
 
 ;; Define package repositories
 (require 'package)
-(add-to-list 'package-archives
-             '("marmalade" . "http://marmalade-repo.org/packages/") t)
-(add-to-list 'package-archives
-             '("tromey" . "http://tromey.com/elpa/") t)
-(add-to-list 'package-archives
-             '("melpa" . "http://melpa.milkbox.net/packages/") t)
+(let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
+                                        (not (gnutls-available-p))))
+              (url (concat (if no-ssl "http" "https") "://melpa.org/packages/")))
+    (add-to-list 'package-archives (cons "melpa" url) t))
+(when (< emacs-major-version 24)
+    ;; For important compatibility libraries like cl-lib
+      (add-to-list 'package-archives '("gnu" . "https://elpa.gnu.org/packages/")))
+(package-initialize)
 
 ;; (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
 ;;                          ("marmalade" . "http://marmalade-repo.org/packages/")
@@ -80,7 +82,10 @@
     tagedit
 
     ;; git integration
-    magit))
+    magit
+
+    clj-refactor
+))
 
 ;; On OS X, an Emacs instance started from the graphical user
 ;; interface will have a different environment than a shell in a
@@ -152,7 +157,7 @@
  '(coffee-tab-width 2)
  '(package-selected-packages
    (quote
-    (tagedit smex rainbow-delimiters projectile paredit magit ido-ubiquitous exec-path-from-shell clojure-mode-extra-font-locking cider))))
+    (tagedit smex rainbow-delimiters projectile magit ido-ubiquitous clojure-mode clj-refactor paredit exec-path-from-shell clojure-mode-extra-font-locking cider))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
